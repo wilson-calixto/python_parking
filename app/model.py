@@ -75,7 +75,7 @@ class Period(db.Model):
 
     __tablename__ = 'period'
 
-    period_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    period_id = db.Column(db.Integer, primary_key=True)
     initial_day = db.Column(db.String)
     final_day = db.Column(db.String)
     

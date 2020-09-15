@@ -16,14 +16,14 @@ def configure_marshmallow(app):
 class ProductSchema(marshmallow.SQLAlchemySchema):
     class Meta:
         model = Product
+        load_instance = True  # Optional: deserialize to model instances
+
         fields = ('product_id','name', 'description', 'price', 'quantity')
+    product_id = auto_field()
 
 class VehicleSchema(marshmallow.SQLAlchemySchema):
     class Meta:
         model = Vehicle
-        # include_relationships = True
-        # load_instance = True
-        # fields = ('vehicle_id', 'vehicle_license_plate')
         load_instance = True  # Optional: deserialize to model instances
 
     vehicle_id = auto_field()
@@ -32,12 +32,14 @@ class VehicleSchema(marshmallow.SQLAlchemySchema):
 class PeriodSchema(marshmallow.SQLAlchemySchema):
     class Meta:
         model = Period
+        load_instance = True  # Optional: deserialize to model instances
         fields = ('period_id','initial_day','final_day','initial_hour','final_hour','value_per_hour')
-
+    period_id = auto_field()
 
 class OrderSchema(marshmallow.SQLAlchemySchema):
     class Meta:
         model = Order
+        load_instance = True  # Optional: deserialize to model instances
         fields = (
         'order_id',
         'fk_vehicle',
@@ -47,3 +49,5 @@ class OrderSchema(marshmallow.SQLAlchemySchema):
         'hour_quantity',
         'total_value',
         'order_date')
+    order_id = auto_field()
+
