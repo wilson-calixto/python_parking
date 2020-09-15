@@ -1,11 +1,23 @@
 from flask import Flask
-from app.config import Config
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from .model import configure_database
+from .serializer import configure_marshmallow
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
-from app import routes, models
+def create_app():
+    """
+    app factory function.
+    """
+
+    app = Flask(__name__)
+    app.config.from_object('config')
+
+    configure_database(app)
+    configure_marshmallow(app)
+
+    Migrate(app, app.db)
+
+    from .products import bp_products
+    app.register_blueprint(bp_products)
+
+    return app

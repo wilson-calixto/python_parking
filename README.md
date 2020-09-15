@@ -3,15 +3,19 @@
 to run this app you must to do the commands above :
 
 python3 -m venv python_parking_venv
+
 source python_parking_venv/bin/activate
 pip install --upgrade pip
-pip install -r requirements.txt
-export FLASK_APP=crudapp.py
+pip install -r Requirements.txt
+export FLASK_APP=app
+
 flask db init
+
 flask db migrate -m "entries table"
 
+flask db upgrade
 
-
+flask run
 
 
 

@@ -1,3 +1,6 @@
-pip install Flask
-pip install Flask-SQLAlchemy
-pip install flask-sqlalchemy mysql-python
+Flask
+Flask-SQLAlchemy
+flask-sqlalchemy mysql-python
+flask_migrate
+flask_marshmallow
+marshmallow_sqlalchemy
