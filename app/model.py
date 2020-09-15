@@ -110,12 +110,12 @@ class Order(db.Model):
 
     order_id = db.Column(db.Integer, primary_key=True)#, autoincrement=True)
 
-    fk_vehicle = db.Column(db.String)
-    fk_period = db.Column(db.String)
-    initial_hour = db.Column(db.String)
-    final_hour = db.Column(db.String)
-    hour_quantity = db.Column(db.String)
-    total_value = db.Column(db.String)
+    fk_vehicle = db.Column(db.Integer)
+    fk_period = db.Column(db.Integer)
+    initial_hour = db.Column(db.Integer)
+    final_hour = db.Column(db.Integer)
+    hour_quantity = db.Column(db.Float)
+    total_value = db.Column(db.Float)
     order_date = db.Column(db.String)
 
 
@@ -130,7 +130,7 @@ class Order(db.Model):
                 
 
     def __repr__(self):
-        return f'<Vehicle {self.order_date}>'
+        return f'<Order {self.order_date}>'
 
 
 

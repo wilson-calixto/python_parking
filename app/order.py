@@ -69,46 +69,90 @@ def finish_order():
     """
     # TODO adicionar tratamento de erro
 
-    vehicle=get_vehicle_by_license_plate_from_db(request.json.get('vehicle_license_plate'))
+    vehicle = get_vehicle_by_license_plate_from_db(request.json.get('vehicle_license_plate'))
+    # print('vehicle.vehicle_id',vehicle.vehicle_id)
 
-    actual_hour = get_actual_hour()
+    unfinshed_order = get_unfinshed_order_from_db_by_vehicle_id(vehicle.vehicle_id)
+    # print('unfinshed_order',unfinshed_order)
 
-    actual_day = get_actual_weekday()
+    requires_a_new_order = update_order(unfinshed_order)
 
-    actual_date = get_actual_date()
+    # if(requires_a_new_order):
+    #     insert_a_complemetary_order()
 
 
-    first_period = get_period_from_db(hour=actual_hour,day=actual_day)
-    #  print("vehicle\n\n",vehicle)
-    # print("first_period\n\n",first_period)
+    # actual_hour = get_actual_hour()
 
+    # actual_day = get_actual_weekday()
+
+    # actual_date = get_actual_date()
+
+
+    # first_period = get_period_from_db(hour=actual_hour,day=actual_day)
+    # #  print("vehicle\n\n",vehicle)
+    # # print("first_period\n\n",first_period)
+
+
+    # temp ={
+    #     "fk_vehicle":vehicle.vehicle_id,
+    #     "fk_period":first_period.period_id,
+    #     "initial_hour":actual_hour,
+    #     "final_hour":0,
+    #     "hour_quantity":0,
+    #     "total_value":0,
+    #     "order_date":actual_date
+    # }
+
+    # order_schema = OrderSchema()    
+    # order = order_schema.load(temp)
+    # current_app.db.session.add(order)
+    # current_app.db.session.commit()
+    
+
+
+    # return order_schema.jsonify(order), 201
+    return {"name":"em desenvolvimento"}, 201
+
+
+
+def get_unfinshed_order_from_db_by_vehicle_id(vehicle_id):
+#    TODO adicionar um campo que indica se a order esta aberta ou não
+
+    last_unfinshed_order = Order.query.filter(
+        Order.fk_vehicle == vehicle_id).filter(
+            Order.total_value==0).first()
+
+
+    return last_unfinshed_order
+
+
+def update_order(unfinshed_order):
+
+    final_hour = get_actual_hour()
+    
+    hour_quantity = get_hour_quantity(unfinshed_order.initial_hour)
 
     temp ={
-        "fk_vehicle":vehicle.vehicle_id,
-        "fk_period":first_period.period_id,
-        "initial_hour":actual_hour,
-        "final_hour":0,
-        "hour_quantity":0,
-        "total_value":0,
-        "order_date":actual_date
+        "final_hour":final_hour,
+        "hour_quantity":hour_quantity,
+        "total_value": hour_quantity * 1,
     }
 
     order_schema = OrderSchema()    
     order = order_schema.load(temp)
     current_app.db.session.add(order)
     current_app.db.session.commit()
-    
-
-
-    return order_schema.jsonify(order), 201
-
-
-
+    return False
 
 #TODO mover para a biblioteca utils
-def get_actual_hour():
-    
+
+def get_hour_quantity(initial_hour):    
+    return get_actual_hour() - initial_hour 
+
+
+def get_actual_hour():   
     return datetime.now().hour * 100 + datetime.now().minute
+
 
 def get_actual_weekday():
     return datetime.now().weekday()
