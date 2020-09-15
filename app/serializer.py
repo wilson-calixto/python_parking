@@ -1,5 +1,5 @@
 from .model import Product
-from .model import Car
+from .model import Vehicle
 from .model import Period
 from .model import Order
 
@@ -18,10 +18,10 @@ class ProductSchema(marshmallow.SQLAlchemySchema):
         model = Product
         fields = ('product_id','name', 'description', 'price', 'quantity')
 
-class CarSchema(marshmallow.SQLAlchemySchema):
+class VehicleSchema(marshmallow.SQLAlchemySchema):
     class Meta:
-        model = Car
-        fields = ('car_id', 'vehicle_license_plate')
+        model = Vehicle
+        fields = ('vehicle_id', 'vehicle_license_plate')
 
 
 class PeriodSchema(marshmallow.SQLAlchemySchema):

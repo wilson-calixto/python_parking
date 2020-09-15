@@ -1,8 +1,8 @@
 from .model import Product
-from .model import Car
+from .model import Vehicle
 
 from .serializer import ProductSchema
-from .serializer import CarSchema
+from .serializer import VehicleSchema
 
 from flask import Blueprint, jsonify, request, current_app
 

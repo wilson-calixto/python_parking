@@ -31,21 +31,21 @@ class Product(db.Model):
         return f'<Product {self.name}>'
 
 
-class Car(db.Model):
+class Vehicle(db.Model):
     """
-    Car Model Class.
+    Vehicle Model Class.
     """
 
-    __tablename__ = 'car'
+    __tablename__ = 'vehicle'
 
-    car_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    vehicle_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     vehicle_license_plate = db.Column(db.String)
 
     def __init__(self, vehicle_license_plate):
         self.vehicle_license_plate = vehicle_license_plate
 
     def __repr__(self):
-        return f'<Car {self.vehicle_license_plate}>'
+        return f'<Vehicle {self.vehicle_license_plate}>'
 
 
 
