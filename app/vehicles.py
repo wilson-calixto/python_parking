@@ -9,6 +9,14 @@ bp_vehicles = Blueprint('vehicles', __name__)
 
 @bp_vehicles.route('/vehicle', methods=['GET'])
 def get_vehicles():
+    return get_all_vehicles_from_db(), 200
+
+@bp_vehicles.route('/vehicle', methods=['POST'])
+def add_vehicle():
+    return add_vehicle_in_bd()
+
+def get_all_vehicles_from_db():
+
     """
     Get all vehicles in the database.
     """
@@ -19,8 +27,8 @@ def get_vehicles():
 
 
 
-@bp_vehicles.route('/vehicle', methods=['POST'])
-def add_vehicle():
+
+def add_vehicle_in_bd():
     """
     Add vehicle in database.
     """
@@ -38,6 +46,13 @@ def add_vehicle():
 
 
 
+def get_vehicle_by_license_plate_from_db(vehicle_license_plate):
+
+    """
+    Get one vehicles in the database.
+    """
+
+    vehicle_schema = VehicleSchema()
     
-    # else:
-    #     return jsonify(error), 401
+    vehicle = Vehicle.query.filter_by(vehicle_license_plate=vehicle_license_plate).first()
+    return vehicle

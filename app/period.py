@@ -33,3 +33,23 @@ def add_period():
 
 
 
+
+
+def get_period_from_db(hour,day):
+    # days dom == 1 ... sab == 7
+    # hous 8 == 8:00 .... 18 == 18:00 
+
+    period_schema = PeriodSchema(many=True)
+    period = Period.query.filter_by(
+        final_hour = hour ,
+        
+        initial_day  = day 
+
+        ).first()
+
+
+        # final_hour <= hour ,
+        # initial_hour >= hour ,
+        # initial_day  <= day ,
+        # final_day >= day  
+    return period
