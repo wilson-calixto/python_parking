@@ -9,15 +9,6 @@ from flask import Blueprint, jsonify, request, current_app
 # Blueprint init
 bp_products = Blueprint('products', __name__)
 
-# @bp_products.route('/car', methods=['GET'])
-# def get_cars():
-#     """
-#     Get all cars in the database.
-#     """
-
-#     car_schema = CarSchema(many=True)
-#     car = Car.query.all()
-#     return car_schema.jsonify(car), 200
 
 @bp_products.route('/products', methods=['GET'])
 def get_products():
