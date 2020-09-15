@@ -76,12 +76,12 @@ class Period(db.Model):
     __tablename__ = 'period'
 
     period_id = db.Column(db.Integer, primary_key=True)
-    initial_day = db.Column(db.String)
-    final_day = db.Column(db.String)
+    initial_day = db.Column(db.Integer)
+    final_day = db.Column(db.Integer)
     
-    initial_hour = db.Column(db.String)
-    final_hour = db.Column(db.String)
-    value_per_hour = db.Column(db.String)
+    initial_hour = db.Column(db.Integer)
+    final_hour = db.Column(db.Integer)
+    value_per_hour = db.Column(db.Float)
 
     
 

@@ -26,30 +26,41 @@ def add_period():
     """
     #TODO tranformar cada chamada em um método de uma biblioteca
     period_schema = PeriodSchema()
-    period = period_schema.load(request.json)
+    
+    converted_period = conver_to_period_db(request.json)
+    
+    period = period_schema.load(converted_period)
     current_app.db.session.add(period)
     current_app.db.session.commit()
     return period_schema.jsonify(period), 201
 
 
+def conver_to_period_db(period):
+    #TODO REMOVER ESSA CONVERSAO NO FUTURO
+
+    # print("conver_to_period_db",type(period['value_per_hour']))
+    # print("dir ",dir(period))
+    # print("type ",type(period))
+    return period
 
 
 
 def get_period_from_db(hour,day):
-    # days dom == 1 ... sab == 7
-    # hous 8 == 8:00 .... 18 == 18:00 
+    # days seg == 0 ... dom == 6
+    # hous 800 == 8:00 .... 1800 == 18:00 
 
-    period_schema = PeriodSchema(many=True)
-    period = Period.query.filter_by(
-        final_hour = hour ,
-        
-        initial_day  = day 
+    # from datetime import datetime, timedelta
 
-        ).first()
+    # TODO trocar as horas de interger por  datetime
+    # now = datetime.now()
+    # eight_hours_ago = now - timedelta(hours=8)
+
+    # period = Period.query.filter(Period.initial_hour >= hour).filter(Period.initial_day >= day).first()
+
+    period = Period.query.filter(
+        Period.initial_hour <= hour).filter(
+            Period.final_hour >= hour).filter(
+                Period.initial_day >= day).first()
 
 
-        # final_hour <= hour ,
-        # initial_hour >= hour ,
-        # initial_day  <= day ,
-        # final_day >= day  
     return period

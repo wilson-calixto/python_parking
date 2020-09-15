@@ -1,8 +1,8 @@
-"""entries table
+"""empty message
 
-Revision ID: dbe2b7fae3a3
+Revision ID: 83035d5b0f1e
 Revises: 
-Create Date: 2020-09-15 15:16:43.545191
+Create Date: 2020-09-15 16:44:21.252318
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'dbe2b7fae3a3'
+revision = '83035d5b0f1e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,11 +31,11 @@ def upgrade():
     )
     op.create_table('period',
     sa.Column('period_id', sa.Integer(), nullable=False),
-    sa.Column('initial_day', sa.String(), nullable=True),
-    sa.Column('final_day', sa.String(), nullable=True),
-    sa.Column('initial_hour', sa.String(), nullable=True),
-    sa.Column('final_hour', sa.String(), nullable=True),
-    sa.Column('value_per_hour', sa.String(), nullable=True),
+    sa.Column('initial_day', sa.Integer(), nullable=True),
+    sa.Column('final_day', sa.Integer(), nullable=True),
+    sa.Column('initial_hour', sa.Integer(), nullable=True),
+    sa.Column('final_hour', sa.Integer(), nullable=True),
+    sa.Column('value_per_hour', sa.Float(), nullable=True),
     sa.PrimaryKeyConstraint('period_id')
     )
     op.create_table('products',
