@@ -20,4 +20,6 @@ def create_app():
     from .products import bp_products
     app.register_blueprint(bp_products)
 
+    from .cars import bp_cars
+    app.register_blueprint(bp_cars)
     return app
