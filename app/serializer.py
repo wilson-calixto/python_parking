@@ -1,6 +1,6 @@
 from .model import Product
 from .model import Vehicle
-from .model import Period
+from .model import Period,Teste_order
 from .model import Order
 
 
@@ -36,18 +36,25 @@ class PeriodSchema(marshmallow.SQLAlchemySchema):
         fields = ('period_id','initial_day','final_day','initial_hour','final_hour','value_per_hour')
     period_id = auto_field()
 
+
+
+class Teste_orderSchema(marshmallow.SQLAlchemySchema):
+    class Meta:
+        model = Teste_order
+        load_instance = True  # Optional: deserialize to model instances
+        fields = ('teste_order_id','initial_day','final_day','initial_hour','final_hour','value_per_hour')
+    teste_order_id = auto_field()
+# fields = ('order_id','fk_vehicle','fk_period','initial_hour','final_hour','hour_quantity','total_value','order_date')
+
+
+
+
+
+
 class OrderSchema(marshmallow.SQLAlchemySchema):
     class Meta:
         model = Order
         load_instance = True  # Optional: deserialize to model instances
-        fields = (
-        'order_id',
-        'fk_vehicle',
-        'fk_period',
-        'initial_hour',
-        'final_hour',
-        'hour_quantity',
-        'total_value',
-        'order_date')
+        fields = ('order_id','fk_vehicle','fk_period','initial_hour','final_hour','hour_quantity','total_value','order_date')
     order_id = auto_field()
 

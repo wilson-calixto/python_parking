@@ -24,7 +24,7 @@ def add_period():
     """
     Add period in database.
     """
-
+    #TODO tranformar cada chamada em um método de uma biblioteca
     period_schema = PeriodSchema()
     period = period_schema.load(request.json)
     current_app.db.session.add(period)

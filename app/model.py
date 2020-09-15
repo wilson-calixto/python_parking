@@ -100,6 +100,7 @@ class Period(db.Model):
 
 
 
+
 class Order(db.Model):
     """
     Order Model Class.
@@ -107,37 +108,56 @@ class Order(db.Model):
 
     __tablename__ = 'order'
 
-    order_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    fk_vehicle = db.Column(db.Integer)
-    fk_period = db.Column(db.Integer)
+    order_id = db.Column(db.Integer, primary_key=True)#, autoincrement=True)
+
+    fk_vehicle = db.Column(db.String)
+    fk_period = db.Column(db.String)
     initial_hour = db.Column(db.String)
     final_hour = db.Column(db.String)
     hour_quantity = db.Column(db.String)
     total_value = db.Column(db.String)
     order_date = db.Column(db.String)
 
-    
 
-    def __init__(self, order_id,
-        fk_vehicle,
-        fk_period,
-        initial_hour,
-        final_hour,
-        hour_quantity,
-        total_value,
-        order_date):
-
-        self.order_id = order_id,
-        self.fk_vehicle = fk_vehicle,
-        self.fk_period = fk_period,
-        self.initial_hour = initial_hour,
-        self.final_hour = final_hour,
-        self.hour_quantity = hour_quantity,
-        self.total_value = total_value,
+    def __init__(self,fk_vehicle,fk_period,initial_hour,final_hour,hour_quantity,total_value,order_date):
+        self.fk_vehicle = fk_vehicle
+        self.fk_period = fk_period
+        self.initial_hour = initial_hour
+        self.final_hour = final_hour
+        self.hour_quantity = hour_quantity
+        self.total_value = total_value
         self.order_date = order_date
-
+                
 
     def __repr__(self):
-        return f'<Order {self.order_id}>'
+        return f'<Vehicle {self.order_date}>'
 
 
+
+
+class Teste_order(db.Model):
+    """
+    Period Model Class.
+    """
+
+    __tablename__ = 'teste_order'
+
+    teste_order_id = db.Column(db.Integer, primary_key=True)
+    initial_day = db.Column(db.String)
+    final_day = db.Column(db.String)
+    
+    initial_hour = db.Column(db.String)
+    final_hour = db.Column(db.String)
+    value_per_hour = db.Column(db.String)
+
+    
+
+    def __init__(self, initial_day,final_day,initial_hour,final_hour,value_per_hour):
+        self.initial_day = initial_day
+        self.final_day = final_day
+        self.initial_hour = initial_hour
+        self.final_hour = final_hour
+        self.value_per_hour = value_per_hour
+
+    def __repr__(self):
+        return f'<teste_order {self.initial_day}>'
