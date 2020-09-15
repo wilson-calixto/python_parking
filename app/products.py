@@ -1,6 +1,5 @@
 from .model import Product
 from .model import Vehicle
-
 from .serializer import ProductSchema
 from .serializer import VehicleSchema
 
@@ -39,6 +38,7 @@ def add_product():
     """
 
     product_schema = ProductSchema()
+    print("\n\n\n ,request.json")
     product, error = product_schema.load(request.json)
 
     if not error:

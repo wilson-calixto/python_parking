@@ -1,3 +1,21 @@
+# import sqlalchemy as sa
+# from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.orm import scoped_session, sessionmaker, relationship, backref
+
+# engine = sa.create_engine("sqlite:///:memory:")
+# session = scoped_session(sessionmaker(bind=engine))
+# Base = declarative_base()
+
+
+# class Author(Base):
+#     __tablename__ = "authors"
+#     id = sa.Column(sa.Integer, primary_key=True)
+#     name = sa.Column(sa.String, nullable=False)
+
+#     def __repr__(self):
+#         return "<Author(name={self.name!r})>".format(self=self)
+
+
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -38,11 +56,12 @@ class Vehicle(db.Model):
 
     __tablename__ = 'vehicle'
 
-    vehicle_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    vehicle_id = db.Column(db.Integer, primary_key=True)#, autoincrement=True)
     vehicle_license_plate = db.Column(db.String)
 
     def __init__(self, vehicle_license_plate):
         self.vehicle_license_plate = vehicle_license_plate
+        
 
     def __repr__(self):
         return f'<Vehicle {self.vehicle_license_plate}>'

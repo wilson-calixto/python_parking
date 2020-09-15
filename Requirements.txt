@@ -1,6 +1,5 @@
 Flask
 Flask-SQLAlchemy
-flask-sqlalchemy mysql-python
 flask_migrate
 flask_marshmallow
 marshmallow_sqlalchemy

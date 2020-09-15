@@ -5,7 +5,7 @@ from .model import Order
 
 
 from flask_marshmallow import Marshmallow
-
+from marshmallow_sqlalchemy import SQLAlchemySchema, auto_field
 
 marshmallow = Marshmallow()
 
@@ -21,8 +21,13 @@ class ProductSchema(marshmallow.SQLAlchemySchema):
 class VehicleSchema(marshmallow.SQLAlchemySchema):
     class Meta:
         model = Vehicle
-        fields = ('vehicle_id', 'vehicle_license_plate')
+        # include_relationships = True
+        # load_instance = True
+        # fields = ('vehicle_id', 'vehicle_license_plate')
+        load_instance = True  # Optional: deserialize to model instances
 
+    vehicle_id = auto_field()
+    vehicle_license_plate = auto_field()
 
 class PeriodSchema(marshmallow.SQLAlchemySchema):
     class Meta:
