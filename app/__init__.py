@@ -6,6 +6,7 @@ from .serializer import configure_marshmallow
 from .products import bp_products
 from .cars import bp_cars
 from .period import bp_period
+from .order import bp_order
 
 
 def create_app():
@@ -27,5 +28,7 @@ def create_app():
 
     app.register_blueprint(bp_cars)
     app.register_blueprint(bp_period)
+    app.register_blueprint(bp_order)
+    
     
     return app
