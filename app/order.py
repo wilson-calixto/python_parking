@@ -68,51 +68,73 @@ def finish_order():
     Add order in database.
     """
     # TODO adicionar tratamento de erro
+    actual_hour = get_actual_hour()
 
     vehicle = get_vehicle_by_license_plate_from_db(request.json.get('vehicle_license_plate'))
-    # print('vehicle.vehicle_id',vehicle.vehicle_id)
 
     unfinshed_order = get_unfinshed_order_from_db_by_vehicle_id(vehicle.vehicle_id)
-    # print('unfinshed_order',unfinshed_order)
 
-    requires_a_new_order = update_order(unfinshed_order)
-
-    # if(requires_a_new_order):
-    #     insert_a_complemetary_order()
+    last_period = get_period_from_db_by_id(unfinshed_order.fk_period)
 
 
-    # actual_hour = get_actual_hour()
+    
+    final_hour = get_final_hour(last_period.final_hour, actual_hour)
 
-    # actual_day = get_actual_weekday()
+    hour_quantity = get_hour_quantity(unfinshed_order.initial_hour,final_hour)
+    
+    total_value = hour_quantity * last_period.value_per_hour
 
-    # actual_date = get_actual_date()
+    update_order(final_hour,hour_quantity,total_value)
+
+    if(requires_a_new_order(actual_hour, last_period.final_hour)):
+        insert_a_complemetary_order(last_period.final_hour + 1, actual_hour, vehicle)
 
 
-    # first_period = get_period_from_db(hour=actual_hour,day=actual_day)
-    # #  print("vehicle\n\n",vehicle)
-    # # print("first_period\n\n",first_period)
-
-
-    # temp ={
-    #     "fk_vehicle":vehicle.vehicle_id,
-    #     "fk_period":first_period.period_id,
-    #     "initial_hour":actual_hour,
-    #     "final_hour":0,
-    #     "hour_quantity":0,
-    #     "total_value":0,
-    #     "order_date":actual_date
-    # }
-
-    # order_schema = OrderSchema()    
-    # order = order_schema.load(temp)
-    # current_app.db.session.add(order)
-    # current_app.db.session.commit()
+    current_app.db.session.commit()
     
 
 
     # return order_schema.jsonify(order), 201
     return {"name":"em desenvolvimento"}, 201
 
+
+def insert_a_complemetary_order(initial_hour, actual_hour,vehicle):
+
+    print("def insert_a_complemetary_order():")
+
+    # TODO melhorar isso
+
+
+    actual_day = get_actual_weekday()
+    
+    actual_date = get_actual_date()
+
+    complementary_period = get_period_from_db(initial_hour,actual_day)
+
+    final_hour = get_final_hour(actual_hour,complementary_period.final_hour)
+
+    hour_quantity = get_hour_quantity(initial_hour,final_hour)
+
+
+    total_value = hour_quantity * complementary_period.value_per_hour
+
+
+    temp ={
+        "fk_vehicle":vehicle.vehicle_id,
+        "fk_period":complementary_period.period_id,
+        "initial_hour":initial_hour,
+        "final_hour":final_hour,
+        "hour_quantity":hour_quantity,
+        "total_value": total_value,
+        "order_date":actual_date
+    }
+
+    # # order_schema = OrderSchema()    
+    # # order = order_schema.load(temp)
+    # # current_app.db.session.add(order)
+
+
+    print("\n\n\n nova ordem\n\n",temp)
 
 
 def get_unfinshed_order_from_db_by_vehicle_id(vehicle_id):
@@ -126,32 +148,54 @@ def get_unfinshed_order_from_db_by_vehicle_id(vehicle_id):
     return last_unfinshed_order
 
 
-def update_order(unfinshed_order):
-
-    final_hour = get_actual_hour()
-    
-    hour_quantity = get_hour_quantity(unfinshed_order.initial_hour)
+def update_order(final_hour,hour_quantity,total_value):
 
     temp ={
         "final_hour":final_hour,
         "hour_quantity":hour_quantity,
-        "total_value": hour_quantity * 1,
+        "total_value": total_value,
     }
+    print("temp",temp)
 
-    order_schema = OrderSchema()    
-    order = order_schema.load(temp)
-    current_app.db.session.add(order)
-    current_app.db.session.commit()
-    return False
+    # order_schema = OrderSchema()    
+    # order = order_schema.load(temp)
+    # current_app.db.session.add(order)
+    # current_app.db.session.commit()
+
 
 #TODO mover para a biblioteca utils
 
-def get_hour_quantity(initial_hour):    
-    return get_actual_hour() - initial_hour 
+def get_final_hour(actual_hour,last_period_hour):
+
+    
+
+    if(requires_a_new_order(actual_hour, last_period_hour)):
+        return last_period_hour
+
+    return actual_hour
+
+def requires_a_new_order(actual_hour, last_period_hour):
+    # TODO tratar esse erro
+    if(actual_hour>1800):
+        return False
+    
+    return actual_hour > last_period_hour
+
+
+
+def get_hour_quantity(initial_hour,final_hour):    
+    print('get_hour_quantity',initial_hour,final_hour)
+    diference = final_hour - initial_hour
+    if(diference < 100):
+        return 1
+    else:
+        return  round(diference/100)
 
 
 def get_actual_hour():   
-    return datetime.now().hour * 100 + datetime.now().minute
+    # return 8 * 100
+    return 18 * 100
+    # return datetime.now().hour * 100 + datetime.now().minute
 
 
 def get_actual_weekday():

@@ -64,3 +64,13 @@ def get_period_from_db(hour,day):
 
 
     return period
+
+
+
+def get_period_from_db_by_id(period_id):
+    
+    period = Period.query.filter(
+        Period.period_id == period_id).first()
+
+
+    return period
