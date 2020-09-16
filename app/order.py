@@ -36,8 +36,6 @@ def add_order():
 
 
     first_period = get_period_from_db(hour=actual_hour,day=actual_day)
-    #  print("vehicle\n\n",vehicle)
-    # print("first_period\n\n",first_period)
 
 
     temp ={
@@ -76,31 +74,28 @@ def finish_order():
 
     last_period = get_period_from_db_by_id(unfinshed_order.fk_period)
 
-
+    args={}
     
-    final_hour = get_final_hour(last_period.final_hour, actual_hour)
+    args['final_hour'] = get_final_hour(last_period.final_hour, actual_hour)
 
-    hour_quantity = get_hour_quantity(unfinshed_order.initial_hour,final_hour)
+    args['hour_quantity'] = get_hour_quantity(unfinshed_order.initial_hour,args['final_hour'])
     
-    total_value = hour_quantity * last_period.value_per_hour
+    args['parcial_value'] = args['hour_quantity'] * last_period.value_per_hour
 
-    update_order(final_hour,hour_quantity,total_value)
+
+    total_value = update_order(unfinshed_order,args)
 
     if(requires_a_new_order(actual_hour, last_period.final_hour)):
-        insert_a_complemetary_order(last_period.final_hour + 1, actual_hour, vehicle)
+        total_value += insert_a_complemetary_order(last_period.final_hour + 1, actual_hour, vehicle)
 
 
     current_app.db.session.commit()
     
-
-
-    # return order_schema.jsonify(order), 201
-    return {"name":"em desenvolvimento"}, 201
+    return {"total_value":total_value}, 201
 
 
 def insert_a_complemetary_order(initial_hour, actual_hour,vehicle):
 
-    print("def insert_a_complemetary_order():")
 
     # TODO melhorar isso
 
@@ -129,12 +124,12 @@ def insert_a_complemetary_order(initial_hour, actual_hour,vehicle):
         "order_date":actual_date
     }
 
-    # # order_schema = OrderSchema()    
-    # # order = order_schema.load(temp)
-    # # current_app.db.session.add(order)
+    order_schema = OrderSchema()    
+    order = order_schema.load(temp)
+    current_app.db.session.add(order)
+    return total_value
 
 
-    print("\n\n\n nova ordem\n\n",temp)
 
 
 def get_unfinshed_order_from_db_by_vehicle_id(vehicle_id):
@@ -148,27 +143,28 @@ def get_unfinshed_order_from_db_by_vehicle_id(vehicle_id):
     return last_unfinshed_order
 
 
-def update_order(final_hour,hour_quantity,total_value):
+def update_order(unfinshed_order,args):
+
 
     temp ={
-        "final_hour":final_hour,
-        "hour_quantity":hour_quantity,
-        "total_value": total_value,
+        "final_hour": args['final_hour'],
+        "hour_quantity": args['hour_quantity'],
+        "total_value": args['parcial_value'],
     }
-    print("temp",temp)
 
-    # order_schema = OrderSchema()    
-    # order = order_schema.load(temp)
-    # current_app.db.session.add(order)
-    # current_app.db.session.commit()
+
+
+    q_result = Order.query.filter(
+        Order.order_id == unfinshed_order.order_id).update(
+            temp)
+
+    return args['parcial_value']
+
 
 
 #TODO mover para a biblioteca utils
 
-def get_final_hour(actual_hour,last_period_hour):
-
-    
-
+def get_final_hour(actual_hour,last_period_hour):  
     if(requires_a_new_order(actual_hour, last_period_hour)):
         return last_period_hour
 
@@ -184,7 +180,6 @@ def requires_a_new_order(actual_hour, last_period_hour):
 
 
 def get_hour_quantity(initial_hour,final_hour):    
-    print('get_hour_quantity',initial_hour,final_hour)
     diference = final_hour - initial_hour
     if(diference < 100):
         return 1

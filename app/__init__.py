@@ -7,6 +7,8 @@ from .products import bp_products
 from .vehicles import bp_vehicles
 from .period import bp_period
 from .order import bp_order
+from .order_report import bp_order_report
+
 
 
 def create_app():
@@ -29,6 +31,8 @@ def create_app():
     app.register_blueprint(bp_vehicles)
     app.register_blueprint(bp_period)
     app.register_blueprint(bp_order)
+    # app.register_blueprint(bp_order_report)
+    
     
     
     return app
