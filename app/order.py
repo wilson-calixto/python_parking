@@ -188,8 +188,8 @@ def get_hour_quantity(initial_hour,final_hour):
 
 
 def get_actual_hour():   
-    # return 8 * 100
-    return 18 * 100
+    return 8 * 100
+    # return 18 * 100
     # return datetime.now().hour * 100 + datetime.now().minute
 
 

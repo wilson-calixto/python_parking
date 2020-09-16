@@ -31,7 +31,7 @@ def create_app():
     app.register_blueprint(bp_vehicles)
     app.register_blueprint(bp_period)
     app.register_blueprint(bp_order)
-    # app.register_blueprint(bp_order_report)
+    app.register_blueprint(bp_order_report)
     
     
     
