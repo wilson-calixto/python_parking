@@ -21,77 +21,88 @@ def get_order():
 
 @bp_order.route('/init_order', methods=['POST'])
 def add_order():
-    """
-    Add order in database.
-    """
-    # TODO adicionar tratamento de erro
+    try:    
 
-    vehicle=get_vehicle_by_license_plate_from_db(request.json.get('vehicle_license_plate'))
+        """
+        Add order in database.
+        """
+        # TODO adicionar tratamento de erro
 
-    actual_hour = get_actual_hour()
+        vehicle=get_vehicle_by_license_plate_from_db(request.json.get('vehicle_license_plate'))
 
-    actual_day = get_actual_weekday()
+        actual_hour = get_actual_hour()
 
-    actual_date = get_actual_date()
+        actual_day = get_actual_weekday()
 
-
-    first_period = get_period_from_db(hour=actual_hour,day=actual_day)
-
-
-    temp ={
-        "fk_vehicle":vehicle.vehicle_id,
-        "fk_period":first_period.period_id,
-        "initial_hour":actual_hour,
-        "final_hour":0,
-        "hour_quantity":0,
-        "total_value":0,
-        "order_date":actual_date
-    }
-
-    order_schema = OrderSchema()    
-    order = order_schema.load(temp)
-    current_app.db.session.add(order)
-    current_app.db.session.commit()
-    
+        actual_date = get_actual_date()
 
 
-    return order_schema.jsonify(order), 201
-    # return 
+        first_period = get_period_from_db(hour=actual_hour,day=actual_day)
+
+
+        temp ={
+            "fk_vehicle":vehicle.vehicle_id,
+            "fk_period":first_period.period_id,
+            "initial_hour":actual_hour,
+            "final_hour":0,
+            "hour_quantity":0,
+            "total_value":0,
+            "order_date":actual_date
+        }
+
+        order_schema = OrderSchema()    
+        order = order_schema.load(temp)
+        current_app.db.session.add(order)
+        current_app.db.session.commit()
+
+
+
+        return order_schema.jsonify(order), 201
+        # return 
+    except Exception as e:
+        return {"error":str(e)}, 500
+
+
 
 
 
 @bp_order.route('/finish_order', methods=['POST'])
 def finish_order():
-    """
-    Add order in database.
-    """
-    # TODO adicionar tratamento de erro
-    actual_hour = get_actual_hour()
+    try:    
 
-    vehicle = get_vehicle_by_license_plate_from_db(request.json.get('vehicle_license_plate'))
+        """
+        Add order in database.
+        """
+        # TODO adicionar tratamento de erro
+        actual_hour = get_actual_hour()
 
-    unfinshed_order = get_unfinshed_order_from_db_by_vehicle_id(vehicle.vehicle_id)
+        vehicle = get_vehicle_by_license_plate_from_db(request.json.get('vehicle_license_plate'))
 
-    last_period = get_period_from_db_by_id(unfinshed_order.fk_period)
+        unfinshed_order = get_unfinshed_order_from_db_by_vehicle_id(vehicle.vehicle_id)
 
-    args={}
-    
-    args['final_hour'] = get_final_hour(last_period.final_hour, actual_hour)
+        last_period = get_period_from_db_by_id(unfinshed_order.fk_period)
 
-    args['hour_quantity'] = get_hour_quantity(unfinshed_order.initial_hour,args['final_hour'])
-    
-    args['parcial_value'] = args['hour_quantity'] * last_period.value_per_hour
+        args={}
+        
+        args['final_hour'] = get_final_hour(last_period.final_hour, actual_hour)
 
-
-    total_value = update_order(unfinshed_order,args)
-
-    if(requires_a_new_order(actual_hour, last_period.final_hour)):
-        total_value += insert_a_complemetary_order(last_period.final_hour + 1, actual_hour, vehicle)
+        args['hour_quantity'] = get_hour_quantity(unfinshed_order.initial_hour,args['final_hour'])
+        
+        args['parcial_value'] = args['hour_quantity'] * last_period.value_per_hour
 
 
-    current_app.db.session.commit()
-    
-    return {"total_value":total_value}, 201
+        total_value = update_order(unfinshed_order,args)
+
+        if(requires_a_new_order(actual_hour, last_period.final_hour)):
+            total_value += insert_a_complemetary_order(last_period.final_hour + 1, actual_hour, vehicle)
+
+
+        current_app.db.session.commit()
+        
+        return {"total_value":total_value}, 201
+
+    except Exception as e:
+        return {"error":str(e)}, 500
 
 
 def insert_a_complemetary_order(initial_hour, actual_hour,vehicle):

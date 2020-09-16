@@ -51,8 +51,11 @@ def get_vehicle_by_license_plate_from_db(vehicle_license_plate):
     """
     Get one vehicles in the database.
     """
+    try:
 
-    vehicle_schema = VehicleSchema()
+        vehicle_schema = VehicleSchema()
+        vehicle = Vehicle.query.filter_by(vehicle_license_plate=vehicle_license_plate).first()
+        return vehicle
     
-    vehicle = Vehicle.query.filter_by(vehicle_license_plate=vehicle_license_plate).first()
-    return vehicle
+    except Exception:
+        raise Exception('Could not find the vehicle_license_plate.')
