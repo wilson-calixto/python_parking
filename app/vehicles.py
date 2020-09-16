@@ -31,10 +31,8 @@ def get_all_vehicles_from_db():
     """
 
     vehicle_schema = VehicleSchema(many=True)
-    print("\n\n\n1\n\n")
     vehicle = Vehicle.query.all()
-    print("\n\n\n2\n\n")
-    return vehicle_schema.jsonify(vehicle), 200
+    return vehicle_schema.jsonify(vehicle)
 
 
 
