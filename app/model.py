@@ -117,30 +117,3 @@ class Order(db.Model):
 
 
 
-
-class Teste_order(db.Model):
-    """
-    Period Model Class.
-    """
-
-    __tablename__ = 'teste_order'
-
-    teste_order_id = db.Column(db.Integer, primary_key=True)
-    initial_day = db.Column(db.String)
-    final_day = db.Column(db.String)
-    
-    initial_hour = db.Column(db.String)
-    final_hour = db.Column(db.String)
-    value_per_hour = db.Column(db.String)
-
-    
-
-    def __init__(self, initial_day,final_day,initial_hour,final_hour,value_per_hour):
-        self.initial_day = initial_day
-        self.final_day = final_day
-        self.initial_hour = initial_hour
-        self.final_hour = final_hour
-        self.value_per_hour = value_per_hour
-
-    def __repr__(self):
-        return f'<teste_order {self.initial_day}>'

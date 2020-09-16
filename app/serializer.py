@@ -1,6 +1,6 @@
 from .model import Product
 from .model import Vehicle
-from .model import Period,Teste_order
+from .model import Period
 from .model import Order
 
 
@@ -38,12 +38,6 @@ class PeriodSchema(marshmallow.SQLAlchemySchema):
 
 
 
-class Teste_orderSchema(marshmallow.SQLAlchemySchema):
-    class Meta:
-        model = Teste_order
-        load_instance = True 
-        fields = ('teste_order_id','initial_day','final_day','initial_hour','final_hour','value_per_hour')
-    teste_order_id = auto_field()
 
 
 

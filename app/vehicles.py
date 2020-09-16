@@ -9,11 +9,20 @@ bp_vehicles = Blueprint('vehicles', __name__)
 
 @bp_vehicles.route('/vehicle', methods=['GET'])
 def get_vehicles():
-    return get_all_vehicles_from_db(), 200
+    # return get_all_vehicles_from_db(), 200
 
+    try:
+        return get_all_vehicles_from_db(), 200
+    except Exception as e:
+        return {"error":str(e)}, 500
+        
 @bp_vehicles.route('/vehicle', methods=['POST'])
 def add_vehicle():
-    return add_vehicle_in_bd()
+    try:
+        return add_vehicle_in_bd()
+    except Exception as e:
+        return {"error":str(e)}, 500
+    
 
 def get_all_vehicles_from_db():
 
@@ -22,7 +31,9 @@ def get_all_vehicles_from_db():
     """
 
     vehicle_schema = VehicleSchema(many=True)
+    print("\n\n\n1\n\n")
     vehicle = Vehicle.query.all()
+    print("\n\n\n2\n\n")
     return vehicle_schema.jsonify(vehicle), 200
 
 
@@ -56,6 +67,5 @@ def get_vehicle_by_license_plate_from_db(vehicle_license_plate):
         vehicle_schema = VehicleSchema()
         vehicle = Vehicle.query.filter_by(vehicle_license_plate=vehicle_license_plate).first()
         return vehicle
-    
     except Exception:
         raise Exception('Could not find the vehicle_license_plate.')

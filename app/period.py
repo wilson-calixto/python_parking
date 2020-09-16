@@ -12,11 +12,13 @@ def get_period():
     """
     Get all period in the database.
     """
+    try:
+        period_schema = PeriodSchema(many=True)
+        period = Period.query.all()
+        return period_schema.jsonify(period), 200
 
-    period_schema = PeriodSchema(many=True)
-    period = Period.query.all()
-    return period_schema.jsonify(period), 200
-
+    except Exception as e:
+        return {"error":str(e)}, 500
 
 
 @bp_period.route('/period', methods=['POST'])
@@ -24,16 +26,18 @@ def add_period():
     """
     Add period in database.
     """
-    #TODO tranformar cada chamada em um método de uma biblioteca
-    period_schema = PeriodSchema()
-    
-    converted_period = conver_to_period_db(request.json)
-    
-    period = period_schema.load(converted_period)
-    current_app.db.session.add(period)
-    current_app.db.session.commit()
-    return period_schema.jsonify(period), 201
-
+    try:
+        #TODO tranformar cada chamada em um método de uma biblioteca
+        period_schema = PeriodSchema()
+        
+        converted_period = conver_to_period_db(request.json)
+        
+        period = period_schema.load(converted_period)
+        current_app.db.session.add(period)
+        current_app.db.session.commit()
+        return period_schema.jsonify(period), 201
+    except Exception as e:
+        return {"error":str(e)}, 500
 
 def conver_to_period_db(period):
     #TODO REMOVER ESSA CONVERSAO NO FUTURO
