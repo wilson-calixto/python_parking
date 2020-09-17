@@ -56,9 +56,11 @@ def add_order():
 
 def checks_the_work_order_is_open(vehicle_license_plate):
     vehicle = get_vehicle_by_license_plate_from_db(vehicle_license_plate)
-    last_order = get_opening_order_from_db_by_vehicle_id(vehicle.vehicle_id)
-    if(last_order is not None):
-        raise Exception("A service order is already open for this vehicle")
+
+    if(vehicle is not None):
+        last_order = get_opening_order_from_db_by_vehicle_id(vehicle.vehicle_id)
+        if(last_order is not None):
+            raise Exception("A service order is already open for this vehicle")
 
 
 

@@ -72,7 +72,8 @@ class Order(db.Model):
     #TODO adicionar chave estrangeira no banco de dados
 
     fk_vehicle = db.Column(db.Integer)
-    fk_period = db.Column(db.Integer)
+    fk_vehicle = db.Column(db.Integer, db.ForeignKey('vehicle.vehicle_id'))
+    fk_period = db.Column(db.Integer, db.ForeignKey('period.period_id'))
     initial_hour = db.Column(db.Integer)
     final_hour = db.Column(db.Integer)
     hour_quantity = db.Column(db.Float)

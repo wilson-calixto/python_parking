@@ -28,6 +28,7 @@ def get_orders_group_by_day():
                                             Order.order_date, \
                                             func.sum(Order.total_value)
                                             )\
+                                    .filter(Order.status == 'close')\
                                     .filter(Order.order_date >= initial_date)\
                                     .filter(Order.order_date <= final_date)\
                                     .group_by(\
