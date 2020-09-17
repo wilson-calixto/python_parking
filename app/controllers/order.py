@@ -16,13 +16,24 @@ bp_order = Blueprint('order', __name__)
 
 @bp_order.route('/order', methods=['GET'])
 def get_order():
-    """
-    Get all order in the database.
-    """
+    try:    
 
-    order_schema = OrderSchema(many=True)
-    order = Order.query.all()
-    return order_schema.jsonify(order), 200
+        """
+        Get all order in the database.
+        """
+
+        order_schema = OrderSchema(many=True)
+        order = Order.query.all()
+        return order_schema.jsonify(order), 200
+        # TODO melhorar essa resposta
+        # response = format_standard_response(success=True)
+        # return response, 201
+
+    except Exception as e:
+        response = format_standard_response(success=False,error=str(e))
+        return response, 500
+
+    
 
 @bp_order.route('/init_order', methods=['POST'])
 def add_order():

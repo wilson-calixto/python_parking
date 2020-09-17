@@ -3,6 +3,7 @@ from ..models.model import Period
 from ..models.serializer import PeriodSchema
 
 from flask import Blueprint, jsonify, request, current_app
+from ..libs.utils import *
 
 # Blueprint init
 bp_period = Blueprint('period', __name__)
@@ -15,10 +16,15 @@ def get_period():
     try:
         period_schema = PeriodSchema(many=True)
         period = Period.query.all()
-        return period_schema.jsonify(period), 200
+        
+        # TODO melhorar essa resposta
+        # response = format_custom_response(message=message)
+        response = period_schema.jsonify(period)
+        return response, 201
 
     except Exception as e:
-        return {"error":str(e)}, 500
+        response = format_standard_response(success=False,error=str(e))
+        return response, 500
 
 
 @bp_period.route('/period', methods=['POST'])
@@ -29,9 +35,12 @@ def add_period():
     try:
         #TODO tranformar cada chamada em um método de uma biblioteca
         new_period = add_new_period(request.json)
-        return new_period, 201
+        
+        response = format_standard_response(success=True)
+        return response, 201
     except Exception as e:
-        return {"error":str(e)}, 500
+        response = format_standard_response(success=False,error=str(e))
+        return response, 500
 
 def add_new_period(new_period):
     period_schema = PeriodSchema()
