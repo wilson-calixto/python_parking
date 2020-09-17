@@ -53,6 +53,9 @@ def format_custom_message_response(message,error=None):
                 "error" : error
         }
         
-def format_custom_data_response(data=None):
-    return {"data" : data }
-      
+def format_custom_data_response(data=None,message=None):
+    return {"message" : message,\
+            "data" : data
+    }
+    
+    
