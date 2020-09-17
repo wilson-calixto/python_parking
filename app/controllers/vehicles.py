@@ -1,16 +1,17 @@
-from .model import Vehicle
+from ..model import Vehicle
 
-from .serializer import VehicleSchema
+from ..serializer import VehicleSchema
+
+from ..libs.utils import *
 
 from flask import Blueprint, jsonify, request, current_app
+
 
 # Blueprint init
 bp_vehicles = Blueprint('vehicles', __name__)
 
 @bp_vehicles.route('/vehicle', methods=['GET'])
 def get_vehicles():
-    # return get_all_vehicles_from_db(), 200
-
     try:
         return get_all_vehicles_from_db(), 200
     except Exception as e:
@@ -20,10 +21,12 @@ def get_vehicles():
 def add_vehicle():
     try:
         added_vehicle = add_vehicle_in_bd(request.json)
-        
-        return vehicle_schema.jsonify(added_vehicle) , 201
+        response = format_standard_response(success=True)
+        return response, 201
+
     except Exception as e:
-        return {"error":str(e)}, 500
+        response = format_standard_response(success=False,error=str(e))
+        return response, 500
     
 
 def get_all_vehicles_from_db():

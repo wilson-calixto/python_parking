@@ -1,6 +1,6 @@
 from .serializer import OrderSchema, Order
 from flask import Blueprint, jsonify, request, current_app
-from .vehicles import *
+
 from .period import *
 from .libs.utils import *
 
