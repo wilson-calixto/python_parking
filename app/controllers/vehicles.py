@@ -1,6 +1,6 @@
-from ..model import Vehicle
+from ..models.model import Vehicle
 
-from ..serializer import VehicleSchema
+from ..models.serializer import VehicleSchema
 
 from ..libs.utils import *
 

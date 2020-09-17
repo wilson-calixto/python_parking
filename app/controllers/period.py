@@ -1,6 +1,6 @@
-from ..model import Period
+from ..models.model import Period
 
-from ..serializer import PeriodSchema
+from ..models.serializer import PeriodSchema
 
 from flask import Blueprint, jsonify, request, current_app
 
