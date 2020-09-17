@@ -1,4 +1,3 @@
-from .model import Product
 from .model import Vehicle
 from .model import Period
 from .model import Order
@@ -13,13 +12,6 @@ def configure_marshmallow(app):
     marshmallow.init_app(app)
 
 
-class ProductSchema(marshmallow.SQLAlchemySchema):
-    class Meta:
-        model = Product
-        load_instance = True 
-
-        fields = ('product_id','name', 'description', 'price', 'quantity')
-    product_id = auto_field()
 
 class VehicleSchema(marshmallow.SQLAlchemySchema):
     class Meta:

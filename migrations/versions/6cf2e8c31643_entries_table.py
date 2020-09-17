@@ -39,14 +39,7 @@ def upgrade():
     sa.PrimaryKeyConstraint('period_id')
     )
 
-    op.create_table('products',
-    sa.Column('product_id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('name', sa.String(), nullable=True),
-    sa.Column('description', sa.String(), nullable=True),
-    sa.Column('price', sa.String(), nullable=True),
-    sa.Column('quantity', sa.Integer(), nullable=True),
-    sa.PrimaryKeyConstraint('product_id')
-    )
+
 
     # 5557 all images muras 
 

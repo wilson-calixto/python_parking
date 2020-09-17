@@ -13,9 +13,18 @@ bp_vehicles = Blueprint('vehicles', __name__)
 @bp_vehicles.route('/vehicle', methods=['GET'])
 def get_vehicles():
     try:
-        return get_all_vehicles_from_db(), 200
+        # return , 200
+        
+        all_vehicles = get_all_vehicles_from_db()
+        #TODO melhorar esse get
+        message = {'vehicles':all_vehicles}
+        response = format_custom_response(message = message)
+        
+        return all_vehicles, 201
+
     except Exception as e:
-        return {"error":str(e)}, 500
+        response = format_standard_response(success=False,error=str(e))
+        return response, 500
         
 @bp_vehicles.route('/vehicle', methods=['POST'])
 def add_vehicle():
