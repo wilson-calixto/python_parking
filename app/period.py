@@ -66,7 +66,8 @@ def get_period_from_db(hour,day):
             Period.final_hour >= hour).filter(
                 Period.initial_day >= day).first()
 
-
+    if (period is None):
+        raise Exception("The current time does not correspond to any registered period, please enter a valid period")
     return period
 
 

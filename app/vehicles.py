@@ -19,7 +19,9 @@ def get_vehicles():
 @bp_vehicles.route('/vehicle', methods=['POST'])
 def add_vehicle():
     try:
-        return add_vehicle_in_bd()
+        added_vehicle = add_vehicle_in_bd(request.json)
+        
+        return vehicle_schema.jsonify(added_vehicle) , 201
     except Exception as e:
         return {"error":str(e)}, 500
     
@@ -37,16 +39,16 @@ def get_all_vehicles_from_db():
 
 
 
-def add_vehicle_in_bd():
+def add_vehicle_in_bd(new_vehicle):
     """
     Add vehicle in database.
     """
 
     vehicle_schema = VehicleSchema()
-    vehicle = vehicle_schema.load(request.json)
+    vehicle = vehicle_schema.load(new_vehicle)
     current_app.db.session.add(vehicle)
     current_app.db.session.commit()
-    return vehicle_schema.jsonify(vehicle), 201
+    return vehicle
 
 
 
