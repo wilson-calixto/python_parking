@@ -27,6 +27,8 @@ def upgrade():
     sa.Column('hour_quantity', sa.Float(), nullable=True),
     sa.Column('total_value', sa.Float(), nullable=True),
     sa.Column('order_date', sa.String(), nullable=True),
+    sa.Column('status', sa.String(), nullable=True),
+
     sa.PrimaryKeyConstraint('order_id')
     )
     period_table = op.create_table('period',

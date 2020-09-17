@@ -40,6 +40,7 @@ class OrderSchema(marshmallow.SQLAlchemySchema):
     class Meta:
         model = Order
         load_instance = True 
-        fields = ('order_id','fk_vehicle','fk_period','initial_hour','final_hour','hour_quantity','total_value','order_date')
+        fields = ('order_id','fk_vehicle','fk_period','initial_hour','final_hour','hour_quantity','total_value','order_date','status')
     order_id = auto_field()
+    status = auto_field()
 

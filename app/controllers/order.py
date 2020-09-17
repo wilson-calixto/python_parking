@@ -43,7 +43,8 @@ def add_order():
         Add order in database.
         """
         
-        vehicle_license_plate = request.json.get('vehicle_license_plate')                
+        vehicle_license_plate = request.json.get('vehicle_license_plate')  
+        checks_the_work_order_is_open(vehicle_license_plate)
         new_order_register = generate_new_order_register(vehicle_license_plate)        
         order = insert_new_order(new_order_register)
         response = format_standard_response(success=True)
@@ -52,6 +53,12 @@ def add_order():
     except Exception as e:
         response = format_standard_response(success=False,error=str(e))
         return response, 500
+
+def checks_the_work_order_is_open(vehicle_license_plate):
+    vehicle = get_vehicle_by_license_plate_from_db(vehicle_license_plate)
+    last_order = get_opening_order_from_db_by_vehicle_id(vehicle.vehicle_id)
+    if(last_order is not None):
+        raise Exception("A service order is already open for this vehicle")
 
 
 
@@ -105,17 +112,22 @@ def finish_order():
 
         vehicle = get_vehicle_by_license_plate_from_db(request.json.get('vehicle_license_plate'))
 
-        unfinshed_order = get_unfinshed_order_from_db_by_vehicle_id(vehicle.vehicle_id)
+        opening_order = get_opening_order_from_db_by_vehicle_id(vehicle.vehicle_id)
 
-        last_period = get_period_from_db_by_id(unfinshed_order.fk_period)
+        if(opening_order is None):
+            raise Exception("service order not found, please check if the vehicle has already entered the system")
+
+
+
+        last_period = get_period_from_db_by_id(opening_order.fk_period)
 
         
         order_update_data = generate_order_update_data(\
-            unfinshed_order.initial_hour,\
+            opening_order.initial_hour,\
             last_period,\
             actual_hour)
 
-        total_value = update_order(unfinshed_order,order_update_data)
+        total_value = update_order(opening_order,order_update_data)
 
         if(requires_a_new_order(actual_hour, last_period.final_hour)):
             total_value += insert_a_complemetary_order(last_period.final_hour + 1, actual_hour, vehicle)
@@ -170,7 +182,8 @@ def insert_a_complemetary_order(initial_hour, actual_hour,vehicle):
         "final_hour":final_hour,
         "hour_quantity":hour_quantity,
         "total_value": total_value,
-        "order_date":actual_date
+        "order_date":actual_date,
+        "status":"close"
     }
 
     order_schema = OrderSchema()    
@@ -181,25 +194,26 @@ def insert_a_complemetary_order(initial_hour, actual_hour,vehicle):
 
 
 
-def get_unfinshed_order_from_db_by_vehicle_id(vehicle_id):
+def get_opening_order_from_db_by_vehicle_id(vehicle_id):
 #    TODO adicionar um campo que indica se a order esta aberta ou não
 
-    last_unfinshed_order = Order.query.filter(
+    last_opening_order = Order.query.filter(
         Order.fk_vehicle == vehicle_id).filter(
-            Order.total_value==0).first()
+            Order.status=='open').first()
 
-    return last_unfinshed_order
+    return last_opening_order
 
 
-def update_order(unfinshed_order,args):
+def update_order(opening_order,args):
     temp ={
         "final_hour": args['final_hour'],
         "hour_quantity": args['hour_quantity'],
         "total_value": args['parcial_value'],
+        "status":"close"
     }
 
     q_result = Order.query.filter(
-        Order.order_id == unfinshed_order.order_id).update(
+        Order.order_id == opening_order.order_id).update(
             temp)
 
     return args['parcial_value']

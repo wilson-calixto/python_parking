@@ -79,6 +79,8 @@ class Order(db.Model):
     total_value = db.Column(db.Float)
     order_date = db.Column(db.String)
 
+    status = db.Column(db.String, default='open')
+
 
     def __init__(self,fk_vehicle,fk_period,initial_hour,final_hour,hour_quantity,total_value,order_date):
         self.fk_vehicle = fk_vehicle
@@ -88,7 +90,7 @@ class Order(db.Model):
         self.hour_quantity = hour_quantity
         self.total_value = total_value
         self.order_date = order_date
-                
+
 
     def __repr__(self):
         return f'<Order {self.order_date}>'
