@@ -45,11 +45,12 @@ Access the project folder and install the necessary dependencies
 
 ```bash
 ~$ cd tests/unit_tests 
+~$ python test_order.py
+        or
 ~$ ./test_coverage.sh 
         or
 ~$ py.test --cov-report html *.py --cov=../../ 
-        or
-~$ python tests_order.py
+
 
 ```
 

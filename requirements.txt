@@ -6,4 +6,4 @@ flask_marshmallow
 marshmallow_sqlalchemy
 pytest
 pytest-cov
-
+flask_bootstrap
