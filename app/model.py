@@ -75,6 +75,7 @@ class Period(db.Model):
         self.value_per_hour = value_per_hour
 
     def __repr__(self):
+        #TODO Melhorar esses prints
         return f'<Period {self.initial_day}>'
 
 

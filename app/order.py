@@ -1,9 +1,8 @@
-from datetime import datetime
 from .serializer import OrderSchema, Order
-
 from flask import Blueprint, jsonify, request, current_app
 from .vehicles import *
 from .period import *
+from .libs.utils import *
 
 
 # Blueprint init
@@ -26,18 +25,16 @@ def add_order():
         """
         Add order in database.
         """
-        # TODO adicionar tratamento de erro
         
         vehicle_license_plate = request.json.get('vehicle_license_plate')                
         new_order_register = generate_new_order_register(vehicle_license_plate)        
         order = insert_new_order(new_order_register)
-                
-        return order, 201
+        response = format_standard_response(success=True)
+        return response, 201
 
     except Exception as e:
-        return {"error":str(e)}, 500
-
-
+        response = format_standard_response(success=False,error=str(e))
+        return response, 500
 
 
 
@@ -109,10 +106,14 @@ def finish_order():
 
         current_app.db.session.commit()
         
-        return {"total_value":total_value}, 201
+        message={"total_value":total_value}
+        response = format_custom_response(message=message)
+        return response, 201
 
     except Exception as e:
-        return {"error":str(e)}, 500
+        response = format_standard_response(success=False,error=str(e))
+        return response, 500
+
 
 def generate_order_update_data(initial_hour,last_period,actual_hour):         
     args={}
@@ -170,20 +171,15 @@ def get_unfinshed_order_from_db_by_vehicle_id(vehicle_id):
         Order.fk_vehicle == vehicle_id).filter(
             Order.total_value==0).first()
 
-
     return last_unfinshed_order
 
 
 def update_order(unfinshed_order,args):
-
-
     temp ={
         "final_hour": args['final_hour'],
         "hour_quantity": args['hour_quantity'],
         "total_value": args['parcial_value'],
     }
-
-
 
     q_result = Order.query.filter(
         Order.order_id == unfinshed_order.order_id).update(
@@ -193,40 +189,4 @@ def update_order(unfinshed_order,args):
 
 
 
-#TODO mover para a biblioteca utils
 
-def get_final_hour(actual_hour,last_period_hour):  
-    if(requires_a_new_order(actual_hour, last_period_hour)):
-        return last_period_hour
-
-    return actual_hour
-
-def requires_a_new_order(actual_hour, last_period_hour):
-    # TODO tratar esse erro
-    if(actual_hour>1800):
-        return False
-    
-    return actual_hour > last_period_hour
-
-
-
-def get_hour_quantity(initial_hour,final_hour):    
-    diference = final_hour - initial_hour
-    if(diference < 100):
-        return 1
-    else:
-        return  round(diference/100)
-
-
-def get_actual_hour():   
-    # return 8 * 100
-    # return 18 * 100
-    return datetime.now().hour * 100 + datetime.now().minute
-
-
-def get_actual_weekday():
-    return datetime.now().weekday()
-    
-
-def get_actual_date():
-    return datetime.now().date()
