@@ -5,7 +5,6 @@ import unittest
 import json 
 
 from app import *
-from app.libs.utils import *
 
 class BasicTests(unittest.TestCase):
  
@@ -13,29 +12,6 @@ class BasicTests(unittest.TestCase):
     def setUp(self):
         app = create_app(custom_config='config_for_tests')
         self.app = app.test_client()
-
-
-    def test_insert_a_order(self):
-        payload = '{"vehicle_license_plate":"aaa1111"}'
-        response = self.app.post('/init_order',json=json.loads(payload))
-        print("response\n\n\n",response)
-        response_json = json.loads(response.data)
-
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response_json['message'], "Operation performed successfully")
-
-    def test_insert_a_duplicate_order(self):
-        payload = '{"vehicle_license_plate":"www0000"}'
-
-        response_temp = self.app.post('/init_order',json=json.loads(payload))
-        response = self.app.post('/init_order',json=json.loads(payload))
-        
-        response_json = json.loads(response.data)
-        
-        self.assertEqual(response.status_code, 500)
-        self.assertEqual(response_json['message'], "Error when performing operation")
-
-
 
 
     def test_finish_a_order(self,vehicle_license_plate="ttt0000"):
@@ -93,6 +69,23 @@ class BasicTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response_json['message'], "No records found, please check the selected dates.")
+
+    def test_finish_a_order2(self,vehicle_license_plate="ttt0000"):
+        
+        payload = '{"vehicle_license_plate":"ttt0000"}'
+
+            # insert a order
+        response_temp = self.app.post('/init_order',json=json.loads(payload))
+
+            # finish a order
+        response = self.app.post('/finish_order',json=json.loads(payload))
+        response_json = json.loads(response.data)
+        
+        self.assertEqual(response.status_code, 201)
+        
+def get_actual_date():
+    return datetime.now().date()
+
 
 if __name__ == "__main__":
     unittest.main()
