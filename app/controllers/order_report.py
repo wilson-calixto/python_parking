@@ -51,10 +51,11 @@ def mount_order_data_result(all_orders):
     converted_order=[]
     #TODO melhorar esse metodo de conversao adicionando jsonify
 
-    temp_message={}
+    
     for order in all_orders:
-        temp_message["day"] = order[0] 
-        temp_message['revenues'] = order[1]         
+        temp_message={}
+        temp_message["date"] = order[0] 
+        temp_message["revenues"] = order[1]         
         converted_order.append(temp_message)
 
 
