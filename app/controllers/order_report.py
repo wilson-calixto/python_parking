@@ -9,10 +9,6 @@ from .period import *
 from ..libs.utils import *
 from ..models.serializer import OrderSchema, Order,PeriodSchema
 
-# Blueprint init
-bp_order_report = Blueprint('order_report', __name__)
-
-@bp_order_report.route('/report', methods=['GET'])
 def get_orders_group_by_day():
     """
     Get all order in the database group by day.
@@ -45,7 +41,6 @@ def get_orders_group_by_day():
     except Exception as e:
         response = format_standard_response(success=False,error=str(e))
         return response, 500
-
 
 
 def generate_report_order_response(all_orders):

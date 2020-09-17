@@ -7,10 +7,6 @@ from ..libs.utils import *
 from flask import Blueprint, jsonify, request, current_app
 
 
-# Blueprint init
-bp_vehicles = Blueprint('vehicles', __name__)
-
-@bp_vehicles.route('/vehicle', methods=['GET'])
 def get_vehicles():
     try:
         # return , 200
@@ -26,7 +22,6 @@ def get_vehicles():
         response = format_standard_response(success=False,error=str(e))
         return response, 500
         
-@bp_vehicles.route('/vehicle', methods=['POST'])
 def add_vehicle():
     try:
         added_vehicle = add_vehicle_in_bd(request.json)
@@ -46,7 +41,6 @@ def get_all_vehicles_from_db():
 
     vehicle_schema = VehicleSchema(many=True)
     vehicle = Vehicle.query.all()
-    print("\n dsddsds:",vehicle, type(vehicle))
 
     return vehicle_schema.jsonify(vehicle)
 
