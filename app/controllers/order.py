@@ -123,8 +123,8 @@ def finish_order():
 
         current_app.db.session.commit()
         
-        message={"total_value":total_value}
-        response = format_custom_message_response(message=message)
+        data={"total_value":total_value}
+        response = format_custom_data_response(data=data)
         return response, 201
 
     except Exception as e:
