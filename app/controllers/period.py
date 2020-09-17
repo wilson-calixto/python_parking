@@ -18,7 +18,7 @@ def get_period():
         period = Period.query.all()
         
         # TODO melhorar essa resposta
-        # response = format_custom_response(message=message)
+        # response = format_custom_message_response(message=message)
         response = period_schema.jsonify(period)
         return response, 201
 

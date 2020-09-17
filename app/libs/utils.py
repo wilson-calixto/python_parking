@@ -48,8 +48,11 @@ def format_standard_response(success,error=None):
             "error":error
             }
 
-def format_custom_response(message,error=None):
-    return {"message":message,\
-                "error":error
+def format_custom_message_response(message,error=None):
+    return {"message" : message,\
+                "error" : error
         }
+        
+def format_custom_data_response(data=None):
+    return {"data" : data }
       

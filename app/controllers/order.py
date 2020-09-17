@@ -124,7 +124,7 @@ def finish_order():
         current_app.db.session.commit()
         
         message={"total_value":total_value}
-        response = format_custom_response(message=message)
+        response = format_custom_message_response(message=message)
         return response, 201
 
     except Exception as e:

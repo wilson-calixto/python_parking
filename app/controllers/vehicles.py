@@ -18,7 +18,7 @@ def get_vehicles():
         all_vehicles = get_all_vehicles_from_db()
         #TODO melhorar esse get
         message = {'vehicles':all_vehicles}
-        response = format_custom_response(message = message)
+        response = format_custom_message_response(message = message)
         
         return all_vehicles, 201
 
@@ -46,6 +46,8 @@ def get_all_vehicles_from_db():
 
     vehicle_schema = VehicleSchema(many=True)
     vehicle = Vehicle.query.all()
+    print("\n dsddsds:",vehicle, type(vehicle))
+
     return vehicle_schema.jsonify(vehicle)
 
 
@@ -78,6 +80,7 @@ def get_vehicle_by_license_plate_from_db(vehicle_license_plate):
 
         vehicle_schema = VehicleSchema()
         vehicle = Vehicle.query.filter_by(vehicle_license_plate=vehicle_license_plate).first()
+
         return vehicle
     except Exception:
         raise Exception('Could not find the vehicle_license_plate.')
