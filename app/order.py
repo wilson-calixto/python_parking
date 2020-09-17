@@ -1,5 +1,5 @@
 from datetime import datetime
-from .serializer import OrderSchema, Order,PeriodSchema
+from .serializer import OrderSchema, Order
 
 from flask import Blueprint, jsonify, request, current_app
 from .vehicles import *

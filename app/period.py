@@ -28,28 +28,21 @@ def add_period():
     """
     try:
         #TODO tranformar cada chamada em um método de uma biblioteca
-        period_schema = PeriodSchema()
-        
-        converted_period = conver_to_period_db(request.json)
-        
-        period = period_schema.load(converted_period)
-        current_app.db.session.add(period)
-        current_app.db.session.commit()
-        return period_schema.jsonify(period), 201
+        new_period = add_new_period(request.json)
+        return new_period, 201
     except Exception as e:
         return {"error":str(e)}, 500
 
-def conver_to_period_db(period):
-    #TODO REMOVER ESSA CONVERSAO NO FUTURO
-
-    # print("conver_to_period_db",type(period['value_per_hour']))
-    # print("dir ",dir(period))
-    # print("type ",type(period))
-    return period
-
+def add_new_period(new_period):
+    period_schema = PeriodSchema()
+    period = period_schema.load(new_period)
+    current_app.db.session.add(period)
+    current_app.db.session.commit()
+    return period_schema.jsonify(period)
 
 
 def get_period_from_db(hour,day):
+    print('hour,day',hour,day)
     # days seg == 0 ... dom == 6
     # hous 800 == 8:00 .... 1800 == 18:00 
 
@@ -64,7 +57,8 @@ def get_period_from_db(hour,day):
     period = Period.query.filter(
         Period.initial_hour <= hour).filter(
             Period.final_hour >= hour).filter(
-                Period.initial_day >= day).first()
+                Period.initial_day <= day).filter(
+                    Period.final_day >= day).first()
 
     if (period is None):
         raise Exception("The current time does not correspond to any registered period, please enter a valid period")

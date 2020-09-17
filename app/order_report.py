@@ -5,7 +5,7 @@ from sqlalchemy.orm import aliased
 from flask import Blueprint, jsonify, request, current_app
 from .vehicles import *
 from .period import *
-
+from sqlalchemy import DDL
 
 # Blueprint init
 bp_order_report = Blueprint('order_report', __name__)
@@ -34,11 +34,10 @@ def get_order():
         my_sum+=order.total_value
     
     #TODO adicionar a query abaixo;
-    # SELECT order_date, SUM(total_value) As Total
-    # FROM order
-    # WHERE order_date between(initial_date,final_date)
-    # GROUP BY order_date; 
+    # SELECT order_date, SUM(total_value) As Total FROM order WHERE order_date between(initial_date,final_date) GROUP BY order_date; 
     
+
+
     # session.query(Table.column, func.count(Table.column)).group_by(Table.column).all()
     bb = current_app.db.session.query(
          func.sum(Order.total_value).label('price')).group_by(
@@ -50,6 +49,10 @@ def get_order():
 
     # print('bb',dir(bb))
     # return order_schema.jsonify(bb), 201
+    custom_query = DDL(""" SELECT order_date, SUM(total_value) As Total FROM order WHERE order_date between(initial_date,final_date) GROUP BY order_date;  """)
+    
+    # connection.execute(custom_query)
 
-
+    print("\n\ncustom_query\n\n",custom_query)
+    
     return {"revenues":my_sum}, 200
