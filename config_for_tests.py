@@ -8,9 +8,3 @@ TEST_DB='database.db'
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + join(basedir, TEST_DB)
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SECRET_KEY = 'secretkey'
-
-
-# TESTING = True
-# WTF_CSRF_ENABLED = False
-# DEBUG = False
-
