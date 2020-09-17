@@ -17,7 +17,8 @@ class BasicTests(unittest.TestCase):
 
     def test_insert_a_order(self):
         payload = '{"vehicle_license_plate":"aaa1111"}'
-        response = self.app.get('/init_order',json=json.loads(payload))
+        response = self.app.post('/init_order',json=json.loads(payload))
+        print("response\n\n\n",response)
         response_json = json.loads(response.data)
 
         self.assertEqual(response.status_code, 201)
@@ -26,8 +27,8 @@ class BasicTests(unittest.TestCase):
     def test_insert_a_duplicate_order(self):
         payload = '{"vehicle_license_plate":"www0000"}'
 
-        response_temp = self.app.get('/init_order',json=json.loads(payload))
-        response = self.app.get('/init_order',json=json.loads(payload))
+        response_temp = self.app.post('/init_order',json=json.loads(payload))
+        response = self.app.post('/init_order',json=json.loads(payload))
         
         response_json = json.loads(response.data)
         
@@ -42,13 +43,13 @@ class BasicTests(unittest.TestCase):
         payload = '{"vehicle_license_plate":'+vehicle_license_plate+'}'
 
             # insert a order
-        response_temp = self.app.get('/init_order',json=json.loads(payload))
+        response_temp = self.app.post('/init_order',json=json.loads(payload))
 
             # finish a order
-        response = self.app.get('/finish_order',json=json.loads(payload))
+        response = self.app.post('/finish_order',json=json.loads(payload))
         response_json = json.loads(response.data)
         
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertIs(response_json['data']['total_value'], float)
 
 
