@@ -8,9 +8,7 @@ from flask import Blueprint, jsonify, request, current_app
 
 
 def get_vehicles():
-    try:
-        # return , 200
-        
+    try:       
         all_vehicles = get_all_vehicles_from_db()
         #TODO melhorar esse get
         message = {'vehicles':all_vehicles}

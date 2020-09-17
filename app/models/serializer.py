@@ -21,18 +21,13 @@ class VehicleSchema(marshmallow.SQLAlchemySchema):
     vehicle_id = auto_field()
     vehicle_license_plate = auto_field()
 
+
 class PeriodSchema(marshmallow.SQLAlchemySchema):
     class Meta:
         model = Period
         load_instance = True 
         fields = ('period_id','initial_day','final_day','initial_hour','final_hour','value_per_hour')
     period_id = auto_field()
-
-
-
-
-
-
 
 
 

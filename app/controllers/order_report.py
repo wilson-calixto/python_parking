@@ -50,8 +50,13 @@ def generate_report_order_response(all_orders):
             return format_custom_data_response(data=data_result,message='No records found, please check the selected dates.')
 
         return format_custom_data_response(data=data_result)
+        # return format_standard_response(success=False,error='str(e)')
 
 def mount_order_data_result(all_orders):
+    if(all_orders is None):
+        return []
+
+
     my_sum = 0
     message={}
 

@@ -4,7 +4,7 @@ Uma pequena API de CRUD com Python e Flask.
 ## Como Executar o Projeto
 
 ```bash
-~$ export FLASK_APP=app
+~$ export FLASK_APP=app_parking
 ~$ export FLASK_ENV=Development
 ~$ export FLASK_DEBUG=True
 ~$ flask run	
