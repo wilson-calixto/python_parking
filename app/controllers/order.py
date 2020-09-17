@@ -36,7 +36,7 @@ def get_order():
     
 
 @bp_order.route('/init_order', methods=['POST'])
-def add_order():
+def init_order():
     try:    
 
         """
@@ -61,8 +61,6 @@ def checks_the_work_order_is_open(vehicle_license_plate):
         last_order = get_opening_order_from_db_by_vehicle_id(vehicle.vehicle_id)
         if(last_order is not None):
             raise Exception("A service order is already open for this vehicle")
-
-
 
 def generate_new_order_register(vehicle_license_plate):
      
@@ -100,7 +98,6 @@ def insert_new_order(new_order_register):
     
     return order_schema.jsonify(order_result)
 
-    
 @bp_order.route('/finish_order', methods=['POST'])
 def finish_order():
     try:    
@@ -194,8 +191,6 @@ def insert_a_complemetary_order(initial_hour, actual_hour,vehicle):
     return total_value
 
 
-
-
 def get_opening_order_from_db_by_vehicle_id(vehicle_id):
 #    TODO adicionar um campo que indica se a order esta aberta ou não
 
@@ -204,7 +199,6 @@ def get_opening_order_from_db_by_vehicle_id(vehicle_id):
             Order.status=='open').first()
 
     return last_opening_order
-
 
 def update_order(opening_order,args):
     temp ={
